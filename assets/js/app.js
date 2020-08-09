@@ -1,17 +1,16 @@
-import React, {Component} from 'react';
-import TodoContextProvider from "./contexts/TodoContext";
-import TodoTable from "./components/TodoTable";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import TodoTable from './components/TodoTable';
+import TodoContextProvider from './contexts/TodoContext';
 
-class App extends Component {
+class App extends React.Component {
     render() {
         return (
-            <div>
-                <TodoContextProvider>
-                    <TodoTable/>
-                </TodoContextProvider>
-            </div>
+            <TodoContextProvider>
+                <TodoTable/>
+            </TodoContextProvider>
         );
     }
 }
 
-export default App;
+ReactDOM.render(<App/>, document.getElementById('root'));

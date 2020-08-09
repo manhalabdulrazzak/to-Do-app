@@ -6,12 +6,25 @@ class TodoContextProvider extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            todo: [{task: 'do do do '}],
+            todos: [
+                {name: 'do something1'},
+                {name: 'do something2'},
+                {name: 'do something3'},
+                {name: 'do something4'},
+                {name: 'do something5'},
+                {name: 'do something6'},
+                {name: 'do something7'},
+            ],
         };
     }
 //create tode
-    createTodo(){
-
+    createTodo(event, todo) {
+        event.preventDefault();
+        let data = [...this.state.todos];
+        data.push(todo);
+        this.setState({
+            todos: data,
+        });
     }
 //read tode
     readTodo(){
@@ -28,15 +41,15 @@ class TodoContextProvider extends Component {
 
     render() {
         return (
-          <TodoContext.Provider volue={{
-              ...this.state,
-              createTodo: this.createTodo.bind(this),
-              updateTodo: this.updateTodo.bind(this),
-              deleteTodo: this.deleteTodo.bind(this),
-          }}>
-              {this.props.children}
-          </TodoContext.Provider>
-        );
+            <TodoContext.Provider value={{
+                ...this.state,
+                createTodo: this.createTodo.bind(this),
+                updateTodo: this.updateTodo.bind(this),
+                deleteTodo: this.deleteTodo.bind(this),
+            }}>
+                {this.props.children}
+            </TodoContext.Provider>
+        )
     }
 }
 
