@@ -1,4 +1,3 @@
-import React, {Fragment, useContext, useState} from 'react';
 import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,9 +6,14 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TextField from '@material-ui/core/TextField';
 import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
-import {TodoContext} from '../contexts/TodoContext'
+import React, {Fragment, useContext, useState} from 'react';
+import {TodoContext} from '../contexts/TodoContext';
+import DoneIcon from '@material-ui/icons/Done';
+import CloseIcon from '@material-ui/icons/Close';
+import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteDialog from './DeleteDialog';
+
 
 function TodoTable() {
     const context = useContext(TodoContext);

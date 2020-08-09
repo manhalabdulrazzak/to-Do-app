@@ -33,5 +33,4 @@ to Enabling React.js we need install this commands
 \
 \
 ` yarn add react react-dom prop-types
-`\
-\
+`

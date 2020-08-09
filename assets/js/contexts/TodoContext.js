@@ -1,23 +1,18 @@
-import React, {Component, createContext} from 'react';
+import React, {createContext} from 'react';
+import axios from 'axios';
 
 export const TodoContext = createContext();
 
-class TodoContextProvider extends Component {
+class TodoContextProvider extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            todos: [
-                {name: 'do something1'},
-                {name: 'do something2'},
-                {name: 'do something3'},
-                {name: 'do something4'},
-                {name: 'do something5'},
-                {name: 'do something6'},
-                {name: 'do something7'},
-            ],
+            todos: [],
         };
+        this.readTodo();
     }
-//create tode
+
+    //create
     createTodo(event, todo) {
         event.preventDefault();
         let data = [...this.state.todos];
@@ -26,17 +21,45 @@ class TodoContextProvider extends Component {
             todos: data,
         });
     }
-//read tode
-    readTodo(){
 
+    //read
+    readTodo() {
+        axios.get('/api/todo/read')
+            .then(response => {
+                this.setState({
+                    todos: response.data,
+                });
+            }).catch(error => {
+            console.error(error);
+        });
     }
-//update tode
-    updateTodo(){
 
+    //update
+    updateTodo(data) {
+        let todos = [...this.state.todos];
+        let todo = todos.find(todo => {
+            return todo.id === data.id;
+        });
+
+        todo.name = data.name;
+
+        this.setState({
+            todos: todos,
+        });
     }
-//delete tode
-    deleteTodo(){
 
+    //delete
+    deleteTodo(data) {
+        let todos = [...this.state.todos];
+        let todo = todos.find(todo => {
+            return todo.id === data.id;
+        });
+
+        todos.splice(todos.indexOf(todo), 1);
+
+        this.setState({
+            todos: todos,
+        });
     }
 
     render() {
@@ -49,7 +72,7 @@ class TodoContextProvider extends Component {
             }}>
                 {this.props.children}
             </TodoContext.Provider>
-        )
+        );
     }
 }
 
