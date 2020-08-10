@@ -1,19 +1,14 @@
+//React
 import React from 'react';
 import ReactDOM from 'react-dom';
-import AppSnackbar from './components/AppSnackbar';
+//custom components
 import DefaultThemeProvider from './components/themes/DefaultThemeProvider';
-import TodoTable from './components/TodoTable';
-import TodoContextProvider from './contexts/TodoContext';
+import Router from "./components/Router";
 
 class App extends React.Component {
 
     render() {
-        return (
-            <TodoContextProvider>
-                <TodoTable/>
-                <AppSnackbar/>
-            </TodoContextProvider>
-        );
+        return <Router/>;
     }
 }
 

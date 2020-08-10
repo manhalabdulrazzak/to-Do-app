@@ -1,26 +1,37 @@
-import {Typography} from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TextField from '@material-ui/core/TextField';
-import EditIcon from '@material-ui/icons/Edit';
-import AddIcon from '@material-ui/icons/Add';
+//REACT
 import React, {Fragment, useContext, useState} from 'react';
+//CONTEXT
 import {TodoContext} from '../contexts/TodoContext';
-import DoneIcon from '@material-ui/icons/Done';
-import CloseIcon from '@material-ui/icons/Close';
-import DeleteIcon from '@material-ui/icons/Delete';
+//MUI COMPONENTS
+import {
+    IconButton,
+    makeStyles,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    TextField,
+    Typography,
+} from '@material-ui/core';
+//MUI ICONS
+import {
+    Add as AddIcon,
+    Close as CloseIcon,
+    Delete as DeleteIcon,
+    Done as DoneIcon,
+    Edit as EditIcon,
+} from '@material-ui/icons';
+//CUSTOM COMPONENTS
 import DeleteDialog from './DeleteDialog';
-import makeStyles from "@material-ui/core/styles/makeStyles";
 
 const useStyles = makeStyles(theme => ({
     thead: {
-        backgroundColor: "#2196f3"
-    }
+        backgroundColor: theme.palette.primary.main,
+    },
 }));
+
+
 function TodoTable() {
     const context = useContext(TodoContext);
     const [addTodoName, setAddTodoName] = useState('');
@@ -32,7 +43,6 @@ function TodoTable() {
     const [todoToBeDeleted, setTodoToBeDeleted] = useState(null);
 
     const classes = useStyles();
-
 
     const onCreateSubmit = (event) => {
         event.preventDefault();
@@ -50,43 +60,56 @@ function TodoTable() {
     return (
         <Fragment>
 
-            <Table>
+            <Table size="small">
                 {/*HEAD*/}
-                <TableHead className={classes.thead}>
-                    <TableRow>
-                        <TableCell>Task</TableCell>
-                        <TableCell>Description</TableCell>
-                        <TableCell align="right">Actions</TableCell>
-                    </TableRow>
-                </TableHead>
-
-                {/*BODY*/}
-                <TableBody>
+                <TableHead>
                     {/*ADD*/}
                     <TableRow>
                         <TableCell>
                             <form onSubmit={onCreateSubmit}>
-                                <TextField type="text" value={addTodoName} onChange={(event) => {
-                                    setAddTodoName(event.target.value);
-                                }} label="New Task" fullWidth={true}/>
+                                <TextField variant="outlined"
+                                           type="text"
+                                           size="small"
+                                           value={addTodoName}
+                                           onChange={(event) => {
+                                               setAddTodoName(event.target.value);
+                                           }}
+                                           label="Task"
+                                           fullWidth={true}/>
                             </form>
                         </TableCell>
 
                         <TableCell>
                             <form>
-                                <TextField type="text" value={addTodoDescription} onChange={(event) => {
-                                    setAddTodoDescription(event.target.value);
-                                }} label="Description" fullWidth={true} multiline={true}/>
+                                <TextField variant="outlined"
+                                           size="small"
+                                           type="text"
+                                           value={addTodoDescription}
+                                           onChange={(event) => {
+                                               setAddTodoDescription(event.target.value);
+                                           }}
+                                           label="Description"
+                                           fullWidth={true}
+                                           multiline={true}/>
                             </form>
                         </TableCell>
 
-                        <TableCell align="right">
-                            <IconButton onClick={onCreateSubmit}>
+                        <TableCell width={130} align="right">
+                            <IconButton color="primary" onClick={onCreateSubmit}>
                                 <AddIcon/>
                             </IconButton>
                         </TableCell>
                     </TableRow>
+                    <TableRow className={classes.thead}>
+                        <TableCell width={200}>Task</TableCell>
+                        <TableCell>Description</TableCell>
+                        <TableCell align="right">Actions</TableCell>
+                    </TableRow>
+                </TableHead>
 
+
+                {/*BODY*/}
+                <TableBody>
                     {/*DATA*/}
                     {context.todos.slice().reverse().map((todo, index) => (
                         <TableRow key={'todo ' + index}>
@@ -138,7 +161,7 @@ function TodoTable() {
                                     </Fragment>
                                     :
                                     <Fragment>
-                                        <IconButton onClick={() => {
+                                        <IconButton color="primary" onClick={() => {
                                             setEditIsShown(todo.id);
                                             setEditTodoName(todo.task);
                                             setEditTodoDescription(todo.description);
@@ -146,7 +169,7 @@ function TodoTable() {
                                             <EditIcon/>
                                         </IconButton>
 
-                                        <IconButton onClick={() => {
+                                        <IconButton color="secondary" onClick={() => {
                                             setDeleteConfirmationIsShown(true);
                                             setTodoToBeDeleted(todo);
                                         }}>
