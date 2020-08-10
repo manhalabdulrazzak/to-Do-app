@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Todo;
+use App\Form\TodoType;
 use App\Repository\TodoRepository;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,22 +36,40 @@ class TodoController extends AbstractController
     {
         $content = json_decode($request->getContent());
 
+        $form = $this->createForm(TodoType::class);
+        $form->submit((array)$content);
+
+        if
+        (!$form->isValid()) {
+            $errors = [];
+            foreach ($form->getErrors(true, true) as $error) {
+                $propertyName = $error->getOrigin()->getName();
+                $errors[$propertyName] = $error->getMessage();
+            }
+            return $this->json([
+                'message' => ['text' => join("\n", $errors), 'level' => 'error'],
+            ]);
+
+        }
+
+
         $todo = new Todo();
 
-        $todo->setName($content->name);
+        $todo->setTask($content->task);
+        $todo->setDescription($content->description);
 
         try {
             $this->entityManager->persist($todo);
             $this->entityManager->flush();
-        } catch (Exception $exception) {
+        } catch (UniqueConstraintViolationException $exception) {
             return $this->json([
-                'message' => ['text' => ['Could not submit To-Do to the database.'], 'level' => 'error']
+                'message' => ['text' => 'Task has to be unique!', 'level' => 'error']
             ]);
 
         }
         return $this->json([
             'todo' => $todo->toArray(),
-            'message' => ['text' => ['To-Do has been created!', 'Task: ' . $content->name], 'level' => 'success']
+            'message' => ['text' => 'To-Do has been created!', 'level' => 'success']
         ]);
     }
 
@@ -79,16 +99,45 @@ class TodoController extends AbstractController
     {
         $content = json_decode($request->getContent());
 
-        $todo->setName($content->name);
+        $form = $this->createForm(TodoType::class);
+        $nonObject = (array)$content;
+        unset($nonObject['id']);
+        $form->submit($nonObject);
+
+
+        if
+        (!$form->isValid()) {
+            $errors = [];
+            foreach ($form->getErrors(true, true) as $error) {
+                $propertyName = $error->getOrigin()->getName();
+                $errors[$propertyName] = $error->getMessage();
+            }
+            return $this->json([
+                'message' => ['text' => join("\n", $errors), 'level' => 'error'],
+            ]);
+
+        }
+
+        if ($todo->getTask() === $content->task && $todo->getDescription() === $content->description) {
+            return $this->json([
+                'message' => ['text' => 'There was no change to the To-Do. Neither the task or the description was changed.', 'level' => 'error']
+            ]);
+        }
+
+        $todo->setTask($content->task);
+        $todo->setDescription($content->description);
 
         try {
             $this->entityManager->flush();
         } catch (Exception $exception) {
-            //error
+            return $this->json([
+                'message' => ['text' => 'Could not reach database when attempting to update a To-Do.', 'level' => 'error']
+            ]);
         }
 
         return $this->json([
-            'message' => 'todo has been updated'
+            'todo' => $todo->toArray(),
+            'message' => ['text' => 'To-Do successfully updated!', 'level' => 'success']
         ]);
 
     }
@@ -105,11 +154,14 @@ class TodoController extends AbstractController
             $this->entityManager->remove($todo);
             $this->entityManager->flush();
         } catch (Exception $exception) {
-            //error
+            return $this->json([
+                'message' => ['text' => 'Could not reach database when attempting to delete a To-Do.', 'level' => 'error']
+            ]);
+
         }
 
         return $this->json([
-            'message' => 'todo has been deleted',
+            'message' => ['text' => 'To-Do has successfully been deleted!', 'level' => 'success']
         ]);
 
     }

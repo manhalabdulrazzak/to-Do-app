@@ -16,14 +16,14 @@ function DeleteDialog(props) {
 
     return (
         <Dialog onClose={hide} fullWidth={true} maxWidth='sm' open={props.open}>
-            <DialogTitle>Are you sure 🤔?</DialogTitle>
+            <DialogTitle>Are you sure you 🤔?</DialogTitle>
             <DialogContent>
-                {props.todo.name}
+                {props.todo.task}
             </DialogContent>
             <DialogActions>
                 <Button onClick={hide}>Cancel</Button>
                 <Button onClick={() => {
-                    context.deleteTodo({id: props.todo.id, name: props.todo.name});
+                    context.deleteTodo({id: props.todo.id, task: props.todo.task});
                     hide();
                 }}>
                     Delete

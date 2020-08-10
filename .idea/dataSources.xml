@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="to-Do-webapp@localhost" uuid="812a2f9e-5474-431d-9b85-712d8b102824">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.NonRegisteringDriver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:8889/to-Do-webapp</jdbc-url>
+    </data-source>
+  </component>
+</project>
