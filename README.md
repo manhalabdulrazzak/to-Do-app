@@ -1,7 +1,6 @@
 # **To Do webapp**
 -----------
-**Small web app via Symfony 5 and react js**
-\
+**ToDo a web app via Symfony 5 and react js mobile friendly responsive design **
 \
 \
 \
